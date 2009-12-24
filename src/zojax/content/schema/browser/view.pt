@@ -1,0 +1,11 @@
+<div class="content-schema">
+  <table>
+    <tbody>
+      <tr tal:repeat="widget view/widgets/values">
+	<th tal:content="widget/label"></th>
+	<td tal:content="structure widget/render"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

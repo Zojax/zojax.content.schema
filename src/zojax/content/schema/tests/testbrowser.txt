@@ -1,0 +1,135 @@
+==============
+Content schema
+==============
+
+    >>> from zope import interface, component
+    >>> from zope.component import getUtility
+    >>> from zope.app.component.hooks import setSite
+    >>> from zojax.content.schema import interfaces
+    >>> from zojax.content.type.interfaces import IContentType
+
+    >>> root = getRootFolder()
+    >>> setSite(root)
+
+    >>> from zojax.content.schema.tests.tests import Document
+    >>> root['document'] = Document()
+    >>> print interfaces.IContentSchema(root['document'], None)
+    None
+
+    >>> ct = getUtility(IContentType, 'content.document')
+    >>> print interfaces.IContentSchema(ct, None)
+    None
+
+    >>> component.getGlobalSiteManager().registerUtility(
+    ...     ct, interfaces.ISchemaAware, ct.name)
+
+    >>> interface.alsoProvides(ct, interfaces.ISchemaAware)
+    >>> schema = interfaces.IContentSchema(root['document'])
+
+    >>> schema.context
+    <zojax.content.schema.tests.tests.Document object at ...>
+
+    >>> schema.title, schema.description, schema.contentdata
+    (u'Document', '', <BTrees.IOBTree.IOBTree object at ...>)
+
+    >>> schema.getSchemaData()
+    {}
+
+    >>> list(schema.items())
+    []
+
+
+Browser tests
+
+    >>> from zope.testbrowser.testing import Browser
+
+    >>> admin = Browser()
+    >>> admin.addHeader("Authorization", "Basic mgr:mgrpw")
+    >>> admin.handleErrors = False
+    >>> admin.open('http://localhost/settings/')
+    >>> admin.getLink('Schema').click()
+
+    >>> print admin.contents
+    <html>
+    ...
+    ...<h1>Schema</h1><div class="z-page-description">This area allows you to configure custom content fields.</div><div class="z-form-standard">
+      <ul class="z-listing">
+        <li>
+          <div class="z-listing-icon">
+             <img ... />
+          </div>
+          <a href="content.document/">Document</a>
+          <div class="byline"></div>
+        </li>
+      </ul>
+    </div>...
+    ...
+    </html>
+
+add field
+
+    >>> admin.getLink('Document').click()
+    >>> admin.getLink('Text Line').click()
+    >>> admin.getControl('Title').value = 'Custom field'
+    >>> admin.getControl('Content short name').value = 'field'
+    >>> admin.getControl('Add').click()
+
+    >>> schema = interfaces.IContentSchema(root['document'])
+    >>> list(schema.items())
+    [(u'field', <zojax.persistent.fields.fields.TextLine object at ...>)]
+
+
+modify content
+
+    >>> admin.open('http://localhost/document/context.html')
+    >>> print admin.contents
+    <html>
+    ...
+    <h2 class="z-form-label">Custom fields</h2>
+    <div class="z-form-fieldset">
+       <div class="z-form-field">
+          <label for="content-schema-widgets-field">Custom field</label>
+          <span class="z-form-fieldRequired">&nbsp;</span>
+          <div class="z-form-help"></div>
+          <div>
+            <input id="content-schema-widgets-field"
+             name="content.schema.widgets.field"
+             class="text-widget required textline-field"
+             value="" type="text" />
+          </div>
+       </div>
+    </div>
+    ...
+    </html>
+
+    >>> admin.getControl('Custom field').value = 'Test value'
+    >>> admin.getControl(name="content.edit.buttons.save").click()
+
+    >>> schema = interfaces.IContentSchema(root['document'])
+    >>> schema.getSchemaData()
+    {u'field': u'Test value'}
+
+    >>> from zojax.layout.interfaces import IPagelet
+    >>> from zope.publisher.browser import TestRequest
+    >>> from zojax.content.schema.tests.tests import IDefaultSkin
+
+    >>> request = TestRequest()
+    >>> interface.alsoProvides(request, IDefaultSkin)
+    >>> view = component.getMultiAdapter((schema, request), IPagelet)
+    >>> view.update()
+    >>> print view.render()
+    <div class="content-schema">
+      <table>
+        <tbody>
+          <tr>
+            <th>Custom field</th>
+            <td>
+                <span id="form-widgets-field"
+                   class="text-widget required textline-field">Test value</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    >>> setSite(None)
