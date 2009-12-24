@@ -1,0 +1,15 @@
+<h1 tal:content="context/__title__"></h1>
+<div class="z-page-description" tal:content="context/__description__"></div>
+
+<div class="z-form-standard">
+  <ul class="z-listing">
+    <li tal:repeat="item view/listContentTypes">
+      <div class="z-listing-icon">
+	<img tal:replace="structure item/@@zmi_icon" />
+      </div>
+      <a tal:attributes="href string:${item/name}/"
+	 tal:content="python:item.title"></a>
+      <div class="byline" tal:content="item/description"></div>
+    </li>
+  </ul>
+</div>

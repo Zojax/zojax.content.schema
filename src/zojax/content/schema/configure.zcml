@@ -1,0 +1,67 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.content.schema">
+
+  <!-- content schema -->
+  <zojax:content
+     name="content.schema"
+     title="Content Schema"
+     schema=".interfaces.IContentSchema"
+     class=".schema.ContentSchema"
+     description="Custom schema for content types."
+     type="zojax.content.type.interfaces.IInactiveType
+	   zojax.persistent.fields.interfaces.IFieldsContainer"
+     contains="zojax.persistent.fields.interfaces.IFieldType" />
+
+  <adapter
+     factory=".schema.ContentSchema"
+     provides=".interfaces.IContentSchema" />
+
+  <adapter factory=".schema.getContentSchema" />
+
+  <class class=".schema.ContentSchema">
+    <implements interface="zojax.content.type.interfaces.IOrderAware" />
+    <implements interface="zojax.content.type.interfaces.IContainerContentsAware" />
+
+    <require
+       permission="zojax.Configure"
+       interface="zope.app.container.interfaces.IWriteContainer" />
+
+    <require
+       permission="zope.View"
+       attributes="__id__"
+       interface=".interfaces.IContentSchema
+		  zojax.content.type.interfaces.IItem
+		  zope.app.container.interfaces.IReadContainer" />
+  </class>
+
+  <adapter
+     for=".schema.ContentSchema"
+     provides="zojax.content.type.interfaces.IOrder"
+     factory="zojax.content.type.configlet.ConfigletContainerOrder" />
+
+  <!-- content schema configlet -->
+  <zojax:configlet
+     title="Schema"
+     name="content.schema"
+     schema=".interfaces.IContentSchemaConfiglet"
+     class=".configlet.ContentSchemaConfiglet"
+     description="This area allows you to configure custom content fields."
+     provides="zojax.content.type.interfaces.IContainerContentsAware"
+     permission="zojax.Configure">
+
+    <require
+       permission="zojax.Configure"
+       interface="zope.app.container.interfaces.IWriteContainer" />
+
+    <require
+       permission="zope.View"
+       interface="zojax.content.type.interfaces.IItem
+		  zope.app.container.interfaces.IReadContainer" />
+  </zojax:configlet>
+
+  <!-- browser views -->
+  <include package=".browser" />
+
+</configure>

@@ -1,0 +1,53 @@
+/* zrt-cssregistry: */
+
+@media all {
+
+  .content-schema {
+    font-size: 90%;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    background-color: transparent;
+  }
+
+  .content-schema-info {
+    float: right;
+    max-width: 40%;
+  }
+
+  .content-schema table {
+    margin-top: 0.75em;
+    background: contentBackgroundColor;
+    border-top: borderWidth borderStyle globalBorderColor;
+  }
+
+  .content-schema a {
+    text-decoration: none;
+  }
+
+  .content-schema a:hover {
+    text-decoration: underline;
+  }
+
+  .content-schema tr {
+    vertical-align: top;
+  }
+
+  .content-schema td {
+    border-right: borderWidth borderStyle globalBorderColor;
+    border-bottom: borderWidth borderStyle globalBorderColor;
+    padding: 0.2em 0.5em;
+    width: 50%;
+  }
+
+  .content-schema th {
+    background-color: globalBackgroundColor;
+    border-left: borderWidth borderStyle globalBorderColor;
+    border-right: borderWidth borderStyle globalBorderColor;
+    border-bottom: borderWidth borderStyle globalBorderColor;
+    color: discreetColor;
+    white-space: nowrap;
+    padding: 0.2em 0.5em;
+    width: auto;
+  }
+
+}
