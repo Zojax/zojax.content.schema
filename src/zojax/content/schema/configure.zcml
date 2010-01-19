@@ -43,7 +43,7 @@
 
   <!-- content schema configlet -->
   <zojax:configlet
-     title="Schema"
+     title="Customizable content item fields"
      name="content.schema"
      schema=".interfaces.IContentSchemaConfiglet"
      class=".configlet.ContentSchemaConfiglet"

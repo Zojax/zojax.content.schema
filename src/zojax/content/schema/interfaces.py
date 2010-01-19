@@ -17,6 +17,10 @@ $Id$
 """
 from zope import interface, schema
 from zope.i18nmessageid import MessageFactory
+from zope.location.interfaces import ILocation
+
+from zojax.content.type.interfaces import IUnremoveableContent, IRenameNotAllowed, \
+                                          IItem
 
 _ = MessageFactory('zojax.content.schema')
 
@@ -45,3 +49,8 @@ class IContentSchemaConfiglet(interface.Interface):
 
     def getSchema(contenttype):
         """ return content schema """
+
+
+class IContentSchemaStaticField(schema.interfaces.IField, IUnremoveableContent, \
+                                IRenameNotAllowed, ILocation, IItem):
+    """ content schema field """

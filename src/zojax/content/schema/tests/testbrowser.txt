@@ -132,4 +132,78 @@ modify content
       </table>
     </div>
 
+Static fields
+-------------
+
+We can register static fields for particular content type
+
+    >>> from z3ext.content.schema.staticfieldtype import StaticFieldType
+    >>> from zope import schema
+
+    >>> field = StaticFieldType('CustomStaticField', schema.TextLine, title=u"Custom static field")
+
+    >>> import z3ext.content
+    >>> component.provideAdapter(field, (z3ext.content.content_document,), interfaces.IContentSchemaStaticField, name='customstaticfield')
+
+modify content
+
+    >>> admin.open('http://localhost/document/context.html')
+    >>> print admin.contents
+    <html>
+    ...
+    <div class="z-form-fieldset">
+        <div class="z-form-field">
+      <label for="content-schema-widgets-field">Custom field</label>
+      <span class="z-form-fieldRequired">&nbsp;</span>
+      <div class="z-form-help"></div>
+      <div>
+        <input id="content-schema-widgets-field"
+               name="content.schema.widgets.field"
+               class="text-widget required textline-field"
+               value="Test value" type="text" />
+    </div>
+    </div> <div class="z-form-field">
+      <label for="content-schema-widgets-customstaticfield" title="">Custom static field</label>
+      <span class="z-form-fieldRequired">&nbsp;</span>
+      <div class="z-form-help"></div>
+      <div>
+        <input id="content-schema-widgets-customstaticfield"
+               name="content.schema.widgets.customstaticfield"
+               class="text-widget required customstaticfield-field"
+               value="" type="text" />
+    </div>
+    </div>
+    ...
+    </html>
+
+    >>> admin.getControl('Custom static field').value = 'Static Field Test value'
+    >>> admin.getControl(name="content.edit.buttons.save").click()
+
+    >>> schema = interfaces.IContentSchema(root['document'])
+    >>> schema.getSchemaData()
+    {u'customstaticfield': u'Static Field Test value', u'field': u'Test value'}
+
+    >>> view = component.getMultiAdapter((schema, request), IPagelet)
+    >>> view.update()
+    >>> print view.render()
+    <div class="content-schema">
+      <table>
+        <tbody>
+          <tr>
+      <th>Custom field</th>
+      <td>
+        <span id="form-widgets-field"
+              class="text-widget required textline-field">Test value</span>
+    </td>
+          </tr> <tr>
+      <th>Custom static field</th>
+      <td>
+        <span id="form-widgets-customstaticfield"
+              class="text-widget required customstaticfield-field">Static Field Test value</span>
+    </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     >>> setSite(None)

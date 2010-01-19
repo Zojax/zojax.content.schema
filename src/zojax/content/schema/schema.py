@@ -74,9 +74,12 @@ class ContentSchema(ContentContainerConfiglet):
 
         data = {}
         for name, field in self.items():
-            id = intids.getId(field)
+            if IContentSchemaStaticField.providedBy(field):
+                fid = hash(name)
+            else:
+                fid = intids.getId(field)
 
-            data[name] = contentdata.get(id, getattr(field, 'default', None))
+            data[name] = contentdata.get(fid, getattr(field, 'default', None))
 
         return data
 
