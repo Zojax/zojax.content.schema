@@ -16,9 +16,9 @@
 $Id$
 """
 from zope import interface
-from z3ext.layoutform import Fields, PageletEditSubForm
-from z3ext.content.type.interfaces import IOrder
-from z3ext.content.schema.interfaces import _, IContentSchema
+from zojax.layoutform import Fields, PageletEditSubForm
+from zojax.content.type.interfaces import IOrder
+from zojax.content.schema.interfaces import _, IContentSchema
 
 
 class ContentSchemaAdd(PageletEditSubForm):

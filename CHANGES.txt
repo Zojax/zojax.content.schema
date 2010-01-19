@@ -1,20 +1,8 @@
-=======
-CHANGES
-=======
-
-0.2.1 (2009-11-19)
+1.0.2 (Unreleased)
 ------------------
 
-- Update tests
 
-
-0.2.0 (2009-08-11)
+1.0.1 (2010-01-19)
 ------------------
 
-- Update test for chameleon enabled setup
-
-
-0.1.0 (2009-06-21)
-------------------
-
-- Initial release.
+- zojax initial release

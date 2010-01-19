@@ -20,16 +20,16 @@ from zope.cachedescriptors.property import Lazy
 from zope.component import getUtility
 from zope.traversing.browser import absoluteURL
 
-from z3ext.layoutform import Fields, PageletEditForm, button
-from z3ext.wizard import WizardWithTabs
-from z3ext.wizard.step import WizardStep, WizardStepForm
-from z3ext.wizard.button import WizardButton
-from z3ext.wizard.interfaces import ISaveable, IForwardAction
-from z3ext.content.forms.wizardedit import EditContentWizard
-from z3ext.layoutform.interfaces import ISaveAction
-from z3ext.statusmessage.interfaces import IStatusMessage
+from zojax.layoutform import Fields, PageletEditForm, button
+from zojax.wizard import WizardWithTabs
+from zojax.wizard.step import WizardStep, WizardStepForm
+from zojax.wizard.button import WizardButton
+from zojax.wizard.interfaces import ISaveable, IForwardAction
+from zojax.content.forms.wizardedit import EditContentWizard
+from zojax.layoutform.interfaces import ISaveAction
+from zojax.statusmessage.interfaces import IStatusMessage
 
-from z3ext.content.schema.interfaces import _
+from zojax.content.schema.interfaces import _
 
 
 class StaticFieldWizard(WizardWithTabs):

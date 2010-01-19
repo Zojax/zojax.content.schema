@@ -2,13 +2,13 @@ from zope.app.component.hooks import getSite
 from zope import component, interface, schema
 from zope.component.globalregistry import provideUtility
 
-from z3ext.content.type.interfaces import IContentType
-from z3ext.principal.profile.interfaces import IProfileFields
-from z3ext.persistent.fields import vocabulary
-from z3ext.content.schema.interfaces import IContentSchema, ISchemaAware, \
+from zojax.content.type.interfaces import IContentType
+from zojax.principal.profile.interfaces import IProfileFields
+from zojax.persistent.fields import vocabulary
+from zojax.content.schema.interfaces import IContentSchema, ISchemaAware, \
                                             IContentSchemaStaticField
 
-from z3ext.content.space.content import ContentSpace
+from zojax.content.space.content import ContentSpace
 
 from zweave import _
 

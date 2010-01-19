@@ -137,13 +137,13 @@ Static fields
 
 We can register static fields for particular content type
 
-    >>> from z3ext.content.schema.staticfieldtype import StaticFieldType
+    >>> from zojax.content.schema.staticfieldtype import StaticFieldType
     >>> from zope import schema
 
     >>> field = StaticFieldType('CustomStaticField', schema.TextLine, title=u"Custom static field")
 
-    >>> import z3ext.content
-    >>> component.provideAdapter(field, (z3ext.content.content_document,), interfaces.IContentSchemaStaticField, name='customstaticfield')
+    >>> import zojax.content
+    >>> component.provideAdapter(field, (zojax.content.content_document,), interfaces.IContentSchemaStaticField, name='customstaticfield')
 
 modify content
 
