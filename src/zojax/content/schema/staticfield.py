@@ -29,5 +29,4 @@ class StaticField(object):
 
     def __init__(self, contenttype):
         self.contenttype = contenttype
-        super(StaticField, self).__init__(title=self.title, \
-                                         description=self.description)
+        super(StaticField, self).__init__(**self.__params__)

@@ -25,7 +25,8 @@ class StaticFieldType(type):
     def __new__(cls, name, field, *args, **kw):
         bases = (StaticField, field)
 
-        cdict = dict({'__module__': 'zojax.content.schema'}, **kw)
+        cdict = dict({'__module__': 'zojax.content.schema',
+                      '__params__': kw}, **kw)
 
         tp = type.__new__(cls, str(name), bases, cdict)
         return tp
