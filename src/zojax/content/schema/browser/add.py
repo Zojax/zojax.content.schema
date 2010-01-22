@@ -16,12 +16,12 @@
 $Id$
 """
 from zope import interface
-from zojax.layoutform import Fields, PageletEditSubForm
+from zojax.layoutform import Fields, PageletAddSubForm
 from zojax.content.type.interfaces import IOrder
 from zojax.content.schema.interfaces import _, IContentSchema
 
 
-class ContentSchemaAdd(PageletEditSubForm):
+class ContentSchemaAdd(PageletAddSubForm):
 
     schema = None
     prefix = 'content.schema'
@@ -48,6 +48,7 @@ class ContentSchemaAdd(PageletEditSubForm):
         self.schema = IContentSchema(self.parentForm._addedObject
         )
         changes = self.schema.setSchemaData(data)
+        print changes
         if changes:
             return {IContentSchema: changes}
         else:
