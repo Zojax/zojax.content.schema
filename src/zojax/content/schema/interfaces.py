@@ -16,11 +16,13 @@
 $Id$
 """
 from zope import interface, schema
-from zope.i18nmessageid import MessageFactory
 from zope.location.interfaces import ILocation
+from zope.i18nmessageid import MessageFactory
 
+from zojax.persistent.fields.interfaces import IField
 from zojax.content.type.interfaces import IUnremoveableContent, IRenameNotAllowed, \
                                           IItem
+
 
 _ = MessageFactory('zojax.content.schema')
 
@@ -52,5 +54,5 @@ class IContentSchemaConfiglet(interface.Interface):
 
 
 class IContentSchemaStaticField(schema.interfaces.IField, IUnremoveableContent, \
-                                IRenameNotAllowed, ILocation, IItem):
+                                IRenameNotAllowed, ILocation, IField):
     """ content schema field """

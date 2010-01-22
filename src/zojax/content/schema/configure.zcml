@@ -39,11 +39,11 @@
   <adapter
      for=".schema.ContentSchema"
      provides="zojax.content.type.interfaces.IOrder"
-     factory="zojax.content.type.configlet.ConfigletContainerOrder" />
+     factory=".schema.ContentSchemaOrder" />
 
   <!-- content schema configlet -->
   <zojax:configlet
-     title="Customizable content item fields"
+     title="Schema"
      name="content.schema"
      schema=".interfaces.IContentSchemaConfiglet"
      class=".configlet.ContentSchemaConfiglet"
@@ -59,7 +59,7 @@
        permission="zope.View"
        interface="zojax.content.type.interfaces.IItem
 		  zope.app.container.interfaces.IReadContainer" />
-  </zojax:configlet>
+  </zojax:configlet>  
 
   <!-- browser views -->
   <include package=".browser" />

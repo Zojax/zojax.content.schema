@@ -27,6 +27,14 @@
      template="view.pt"
      class=".view.ContentSchemaView"
      permission="zope.View" />
+     
+  <zojax:pagelet
+     name="content.schema"
+     type="form.subform"
+     for="zojax.content.type.interfaces.IContentType
+          zojax.content.forms.form.AddForm"
+     class=".add.ContentSchemaAdd"
+     weight="100" />
 
   <!-- wizard step -->
   <zojax:pagelet
@@ -36,6 +44,34 @@
 	  zojax.content.forms.interfaces.IContentStep"
      class=".edit.ContentSchemaEdit"
      weight="100" />
+     
+  <browser:defaultView
+     name="context.html"
+     for="..interfaces.IContentSchemaStaticField" />
+     
+  <!-- static field views -->
+  <zojax:pagelet
+     name="context.html"
+     for="..interfaces.IContentSchemaStaticField"
+     class=".wizard.StaticFieldWizard"
+     provides="zojax.content.forms.interfaces.IEditContentWizard"
+     permission="zojax.Configure" />
+     
+  <zojax:pagelet
+     name="view"
+     title="View"
+     type="wizard.step"
+     for="..interfaces.IContentSchemaStaticField
+          .wizard.StaticFieldWizard"
+     class=".wizard.ViewField"
+     permission="zojax.Configure"
+     weight="999" />
+     
+   <adapter
+       name="next"
+       for="* .wizard.StaticFieldWizard *"
+       provides="zojax.wizard.interfaces.IWizardButton"
+       factory=".wizard.next" />
 
   <!-- styles -->
   <zojax:resourceinclude

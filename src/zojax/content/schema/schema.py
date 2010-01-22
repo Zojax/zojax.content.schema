@@ -20,13 +20,16 @@ from BTrees.IOBTree import IOBTree
 from zope import interface, component
 from zope.component import getUtility
 from zope.security.proxy import removeSecurityProxy
+from zope.proxy import removeAllProxies
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zojax.controlpanel.interfaces import IConfigletData
-from zojax.content.type.configlet import ContentContainerConfiglet
+from zojax.content.type.configlet import ContentContainerConfiglet, ItemLocationProxy
 from zojax.content.type.interfaces import IContent, IContentType
+from zojax.content.type.configlet import ConfigletContainerOrder
 
-from interfaces import ISchemaAware, IContentSchema, IContentSchemaConfiglet
+from interfaces import ISchemaAware, IContentSchema, IContentSchemaConfiglet, \
+                       IContentSchemaStaticField
 
 ANNOTATION_KEY = 'zojax.content.schema'
 
@@ -78,7 +81,6 @@ class ContentSchema(ContentContainerConfiglet):
                 fid = hash(name)
             else:
                 fid = intids.getId(field)
-
             data[name] = contentdata.get(fid, getattr(field, 'default', None))
 
         return data
@@ -91,22 +93,71 @@ class ContentSchema(ContentContainerConfiglet):
         changes = []
 
         for name, field in self.items():
-            id = intids.getId(field)
             value = data.get(name, field.default)
 
-            if contentdata.get(id) != value:
-                changes.append(name)
+            if IContentSchemaStaticField.providedBy(field):
+                fid = hash(name)
+            else:
+                fid = intids.getId(field)
 
-            contentdata[id] = value
+            if contentdata.get(fid) != value:
+                changes.append(name)
+                contentdata[fid] = value
 
         return changes
 
     def values(self):
-        return super(ContentSchema, self).values() + []
+        return super(ContentSchema, self).values() + self.getStaticFields()
 
+    def keys(self):
+        return list(self.data.keys()) + [name for name, field in self.getStaticFields()]
+
+    def items(self):
+        return [(name, self[name]) for name in self]
+
+    def get(self, key, default=None):
+        item = self.data.get(key, default)
+
+        if item is default:
+            item = dict(self.getStaticFields()).get(key, default)
+            if item is default:
+                return item
+
+        return ItemLocationProxy(removeAllProxies(item), self)
+
+    def __contains__(self, key):
+        return key in self.data
+
+    def __iter__(self):
+        return iter(self.keys())
+
+    def __getitem__(self, key):
+        item = self.get(key)
+        if item is None:
+            raise KeyError(key)
+        return item
 
     def getStaticFields(self):
-        return get
+        fields = []
+        for name, field in component.getAdapters((self.contenttype,), IContentSchemaStaticField):
+            field.__name__ = str(name)
+            fields.append((field.order, name, field))
+        fields.sort()
+        return [(name, field) for order, name, field in fields]
+
+    def __len__(self):
+        '''See interface `IReadContainer`'''
+        return super(ContentSchema, self).__len__() + len(self.getStaticFields())
+
+
+class ContentSchemaOrder(ConfigletContainerOrder):
+
+    def __init__(self, *kv, **kw):
+        super(ContentSchemaOrder, self).__init__(*kv, **kw)
+        if len(self.context) != len(self):
+            for key in set(self.context.keys()).difference(set(self.keys())):
+                self.addItem(key)
+
 
 @component.adapter(IContent)
 @interface.implementer(IContentSchema)

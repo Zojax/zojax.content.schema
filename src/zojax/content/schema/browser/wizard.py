@@ -38,7 +38,7 @@ class StaticFieldWizard(WizardWithTabs):
     id = 'static-field-wizard'
 
     def upperContainer(self):
-        return '%s/'%absoluteURL(self.context.__parent__, self.request)
+        return '%s/'%absoluteURL(self.context.__parent__, request)
 
 
 next = WizardButton(

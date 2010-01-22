@@ -45,7 +45,8 @@ class ContentSchemaAdd(PageletEditSubForm):
         return self.schema is not None
 
     def applyChanges(self, data):
-        self.schema = IContentSchema(self.parentForm._addedObject)
+        self.schema = IContentSchema(self.parentForm._addedObject
+        )
         changes = self.schema.setSchemaData(data)
         if changes:
             return {IContentSchema: changes}

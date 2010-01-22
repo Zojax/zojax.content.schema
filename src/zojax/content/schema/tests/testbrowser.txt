@@ -183,6 +183,8 @@ modify content
     >>> schema.getSchemaData()
     {u'customstaticfield': u'Static Field Test value', u'field': u'Test value'}
 
+    >>> request = TestRequest()
+    >>> interface.alsoProvides(request, IDefaultSkin)
     >>> view = component.getMultiAdapter((schema, request), IPagelet)
     >>> view.update()
     >>> print view.render()
