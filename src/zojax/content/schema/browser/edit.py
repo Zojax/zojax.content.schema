@@ -15,7 +15,8 @@
 
 $Id$
 """
-from zope import interface
+from zope import interface, event
+from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zojax.layoutform import Fields, PageletEditSubForm
 from zojax.content.type.interfaces import IOrder
 from zojax.content.schema.interfaces import _, IContentSchema
@@ -47,6 +48,7 @@ class ContentSchemaEdit(PageletEditSubForm):
     def applyChanges(self, data):
         changes = self.schema.setSchemaData(data)
         if changes:
+            event.notify(ObjectModifiedEvent(self.context, Attributes(IContentSchema, *changes)))
             return {IContentSchema: changes}
         else:
             return {}

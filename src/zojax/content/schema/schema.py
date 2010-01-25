@@ -107,10 +107,10 @@ class ContentSchema(ContentContainerConfiglet):
         return changes
 
     def values(self):
-        return list(super(ContentSchema, self).values()) + [field for name, field in self.getStaticFields()]
+        return [field for name, field in self.getStaticFields()] + list(super(ContentSchema, self).values())
 
     def keys(self):
-        return list(self.data.keys()) + [name for name, field in self.getStaticFields()]
+        return [name for name, field in self.getStaticFields()] + list(self.data.keys())
 
     def items(self):
         return [(name, self[name]) for name in self]

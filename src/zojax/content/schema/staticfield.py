@@ -26,7 +26,14 @@ from interfaces import _
 class StaticField(object):
 
     interface.implements(IContentSchemaStaticField)
+    
+    order = 0
 
     def __init__(self, contenttype):
         self.contenttype = contenttype
+        if 'order' in self.__params__:
+            order = self.__params__.pop('order')
+        else:
+            order = self.order
         super(StaticField, self).__init__(**self.__params__)
+        self.order = order

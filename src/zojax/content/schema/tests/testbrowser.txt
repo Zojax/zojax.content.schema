@@ -6,7 +6,7 @@ Content schema
     >>> from zope.component import getUtility
     >>> from zope.app.component.hooks import setSite
     >>> from zojax.content.schema import interfaces
-    >>> from zojax.content.type.interfaces import IContentType
+    >>> from zojax.content.type.interfaces import IContentType, IOrder
 
     >>> root = getRootFolder()
     >>> setSite(root)
@@ -140,8 +140,7 @@ We can register static fields for particular content type
     >>> from zojax.content.schema.staticfieldtype import StaticFieldType
     >>> from zope import schema
 
-    >>> field = StaticFieldType('CustomStaticField', schema.TextLine, title=u"Custom static field")
-
+    >>> field = StaticFieldType('CustomStaticField', schema.TextLine, title=u"Custom static field", order=1)
     >>> import zojax.content
     >>> component.provideAdapter(field, (zojax.content.content_document,), interfaces.IContentSchemaStaticField, name='customstaticfield')
 
@@ -179,13 +178,13 @@ modify content
     >>> admin.getControl('Custom static field').value = 'Static Field Test value'
     >>> admin.getControl(name="content.edit.buttons.save").click()
 
-    >>> schema = interfaces.IContentSchema(root['document'])
-    >>> schema.getSchemaData()
+    >>> contentschema = interfaces.IContentSchema(root['document'])
+    >>> contentschema.getSchemaData()
     {u'customstaticfield': u'Static Field Test value', u'field': u'Test value'}
 
     >>> request = TestRequest()
     >>> interface.alsoProvides(request, IDefaultSkin)
-    >>> view = component.getMultiAdapter((schema, request), IPagelet)
+    >>> view = component.getMultiAdapter((contentschema, request), IPagelet)
     >>> view.update()
     >>> print view.render()
     <div class="content-schema">
@@ -207,5 +206,17 @@ modify content
         </tbody>
       </table>
     </div>
+
+Static fields can be preordered using order attribute
+    >>> field = StaticFieldType('CustomStaticField 2', schema.TextLine, title=u"Custom static field 2", order=0)
+
+    >>> component.provideAdapter(field, (zojax.content.content_document,), interfaces.IContentSchemaStaticField, name='customstaticfield2')
+
+    >>> contentschema.keys()
+    [u'customstaticfield2', u'customstaticfield', u'field']
+
+But using IOrder all stays same
+    >>> list(IOrder(contentschema).keys())
+    [u'field', u'customstaticfield', u'customstaticfield2']
 
     >>> setSite(None)
