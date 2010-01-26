@@ -59,7 +59,7 @@ class ViewField(WizardStepForm):
     def fields(self):
         return Fields(self.context)
 
-    def extractData(self):
+    def extractData(self, setErrors=True):
         return {}, ()
 
     @button.buttonAndHandler(_(u'Test'), name='test')
