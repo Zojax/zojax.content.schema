@@ -42,7 +42,7 @@ class ContentSchemaAdd(PageletAddSubForm):
             super(ContentSchemaAdd, self).update()
 
     def isAvailable(self):
-        return self.schema is not None
+        return self.schema is not None and len(self.schema)
 
     def applyChanges(self, data):
         self.schema = IContentSchema(self.parentForm._addedObject

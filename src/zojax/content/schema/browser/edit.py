@@ -43,7 +43,7 @@ class ContentSchemaEdit(PageletEditSubForm):
             super(ContentSchemaEdit, self).update()
 
     def isAvailable(self):
-        return self.schema is not None
+        return self.schema is not None and len(self.schema)
 
     def applyChanges(self, data):
         changes = self.schema.setSchemaData(data)

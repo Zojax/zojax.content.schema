@@ -157,6 +157,8 @@ class ContentSchemaOrder(ConfigletContainerOrder):
         if len(self.context) != len(self):
             for key in set(self.context.keys()).difference(set(self.keys())):
                 self.addItem(key)
+            for key in set(self.keys()).difference(set(self.context.keys())):
+                self.removeItem(key)
 
 
 @component.adapter(IContent)
