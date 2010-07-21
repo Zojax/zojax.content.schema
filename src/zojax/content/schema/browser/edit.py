@@ -20,6 +20,7 @@ from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zojax.layoutform import Fields, PageletEditSubForm
 from zojax.content.type.interfaces import IOrder
 from zojax.content.schema.interfaces import _, IContentSchema
+from zojax.content.schema.schema import getContentSchema
 
 
 class ContentSchemaEdit(PageletEditSubForm):
@@ -36,7 +37,7 @@ class ContentSchemaEdit(PageletEditSubForm):
         return self.schema.getSchemaData()
 
     def update(self):
-        schema = IContentSchema(self.context, None)
+        schema = getContentSchema(self.context)
 
         if schema is not None and schema.context is not None:
             self.schema = schema
