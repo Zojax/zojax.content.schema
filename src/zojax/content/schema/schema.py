@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zope.component.interfaces import ComponentLookupError
 """
 
 $Id$
@@ -42,6 +43,9 @@ class ContentSchema(ContentContainerConfiglet):
     __tests__ = ()
 
     def __init__(self, contenttype):
+        if not IContentType.providedBy(contenttype):
+            self.bind(contenttype)
+            contenttype = IContentType(contenttype)
         self.__id__ = u'content.schema.%s'%contenttype.name
         self.__name__ = contenttype.name
 

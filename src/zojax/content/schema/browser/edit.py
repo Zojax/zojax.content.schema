@@ -37,7 +37,7 @@ class ContentSchemaEdit(PageletEditSubForm):
         return self.schema.getSchemaData()
 
     def update(self):
-        schema = getContentSchema(self.context)
+        schema = IContentSchema(self.context, None)
 
         if schema is not None and schema.context is not None:
             self.schema = schema
