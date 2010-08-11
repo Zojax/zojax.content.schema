@@ -83,7 +83,7 @@ class ContentSchema(ContentContainerConfiglet):
 
         def getHash(str):
             res = hash(str)
-            while res > 0xFFFFFFFF:
+            while abs(res) > 0xFFFFFFFF:
                 res = int(res/0xFFFFFFFF)
             return res
 
