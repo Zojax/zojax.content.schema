@@ -107,7 +107,7 @@ class ContentSchema(ContentContainerConfiglet):
             value = data.get(name, field.default)
 
             if IContentSchemaStaticField.providedBy(field):
-                fid = hash(name)
+                fid = getHash(name)
             else:
                 fid = intids.getId(field)
 
