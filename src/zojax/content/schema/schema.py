@@ -74,6 +74,12 @@ class ContentSchema(ContentContainerConfiglet):
 
         return data
 
+    def getHash(self, str):
+            res = hash(str)
+            while abs(res) > 0xFFFFFFFF:
+                res = int(res/0xFFFFFFFF)
+            return res
+
     def getSchemaData(self):
         intids = getUtility(IIntIds)
 
@@ -81,15 +87,9 @@ class ContentSchema(ContentContainerConfiglet):
 
         data = {}
 
-        def getHash(str):
-            res = hash(str)
-            while abs(res) > 0xFFFFFFFF:
-                res = int(res/0xFFFFFFFF)
-            return res
-
         for name, field in self.items():
             if IContentSchemaStaticField.providedBy(field):
-                fid = getHash(name)
+                fid = self.getHash(name)
             else:
                 fid = intids.getId(field)
             data[name] = contentdata.get(fid, getattr(field, 'default', None))
@@ -107,7 +107,7 @@ class ContentSchema(ContentContainerConfiglet):
             value = data.get(name, field.default)
 
             if IContentSchemaStaticField.providedBy(field):
-                fid = getHash(name)
+                fid = self.getHash(name)
             else:
                 fid = intids.getId(field)
 
