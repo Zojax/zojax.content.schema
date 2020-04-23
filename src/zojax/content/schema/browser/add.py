@@ -15,7 +15,7 @@
 
 $Id$
 """
-from zope import interface
+
 from zojax.layoutform import Fields, PageletAddSubForm
 from zojax.content.type.interfaces import IOrder
 from zojax.content.schema.interfaces import _, IContentSchema
@@ -45,9 +45,11 @@ class ContentSchemaAdd(PageletAddSubForm):
         return self.schema is not None and len(self.schema)
 
     def applyChanges(self, data):
-        self.schema = IContentSchema(self.parentForm._addedObject)
-        changes = self.schema.setSchemaData(data)
-        if changes:
-            return {IContentSchema: changes}
-        else:
+        schema = IContentSchema(self.parentForm._addedObject, None)
+        if schema is not None:
+            self.schema = schema
+            changes = self.schema.setSchemaData(data)
+            if changes:
+                return {IContentSchema: changes}
+
             return {}
